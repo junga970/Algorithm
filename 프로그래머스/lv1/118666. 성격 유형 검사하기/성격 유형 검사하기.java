@@ -8,7 +8,9 @@ class Solution {
         for (String s : type) {
             hm.put(s, 0);
         }
-
+        
+        // survey[i]:"AN" 이면 type1은 A, type2는 N이 되고
+        // 해당 점수를 해시맵의 value로 계산한다.
         for (int i = 0; i < survey.length; i++) {
             String type1 = survey[i].substring(0, 1);
             String type2 = survey[i].substring(1, 2);
@@ -36,7 +38,8 @@ class Solution {
             }
         }
 
-
+        
+        // 점수를 비교하여 결과 얻기
         StringBuilder result = new StringBuilder("");
         for (int i = 0; i < type.length; i += 2) {
             int type1 = hm.get(type[i]);
