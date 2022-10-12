@@ -21,8 +21,9 @@ class Solution {
             cnt++;
         }
         
+        // scovile배열에
         if(pq.poll() >= K) {
-            return 1;
+            return cnt;
         }
         
         return -1;
