@@ -10,6 +10,36 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
+        // 합 배열
+        int[] S = new int[N + 1];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 1; i < S.length; i++) {
+            S[i] = S[i - 1] + Integer.parseInt(st.nextToken());
+        }
+
+        // 구간 합 출력
+        int start;
+        int end;
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            start = Integer.parseInt(st.nextToken());
+            end = Integer.parseInt(st.nextToken());
+            System.out.println(S[end] - S[start - 1]);
+        }
+    }
+}
+
+/** 1번 째 제출 코드 문제점
+ * 기준 배열을 만들 필요가 없다.
+ * 바로 합 배열을 만들면 된다.
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
         // 기준 배열
         int[] nums = new int[N + 1];
         st = new StringTokenizer(br.readLine());
@@ -34,3 +64,4 @@ public class Main {
         }
     }
 }
+ **/
