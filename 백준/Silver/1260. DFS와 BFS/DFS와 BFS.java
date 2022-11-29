@@ -43,6 +43,7 @@ public class Main {
     static void dfs(int vertex) {
         visited[vertex] = true;
         System.out.print(vertex + " ");
+        
         for (int v : graph[vertex]) {
             if (!visited[v]) {
                 dfs(v);
@@ -53,19 +54,18 @@ public class Main {
     static void bfs(int vertex) {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(vertex);
+        visited[vertex] = true;
+        
         while (!queue.isEmpty()) {
             int curV = queue.poll();
-            if (visited[curV] == true) {
-                continue;
-            }
+            System.out.print(curV + " ");
             
-            visited[curV] = true;
             for (int v : graph[curV]) {
                 if(!visited[v]) {
                     queue.add(v);
+                    visited[v] = true;
                 }
             }
-            System.out.print(curV + " ");
         }
     }
 }
