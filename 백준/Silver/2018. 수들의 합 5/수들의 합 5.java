@@ -13,7 +13,7 @@ public class Main {
         int sum = 1;
 
         int cnt = 1; // 자기 자신 N 추가
-        while (endN != N) {
+        while (startN < N / 2 + 1) {
             if (sum < N) {
                 /*
                  * 합이 N보다 작을 때
