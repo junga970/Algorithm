@@ -1,86 +1,172 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Node implements Comparable<Node>{
-    int end, weight;
+class Main {
+  static int V, E, K;
+  static ArrayList<Edge>[] graph;
+  static int[] distance;
 
-    public Node(int end, int weight){
-        this.end = end;
-        this.weight = weight;
+  public static void main(String[] args) throws IOException {
+
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    V = Integer.parseInt(st.nextToken());
+    E = Integer.parseInt(st.nextToken());
+    K = Integer.parseInt(br.readLine());
+
+    // 그래프, 거리배열 초기화
+    distance = new int[V + 1];
+    Arrays.fill(distance, Integer.MAX_VALUE);
+
+    graph = new ArrayList[V + 1];
+    for (int i = 1; i <= V; i++) {
+      graph[i] = new ArrayList<>();
     }
 
-    @Override
-    public int compareTo(Node o) {
-        return weight - o.weight;
+    // 그래프 간선 연결
+    for (int i = 0; i < E; i++) {
+      st = new StringTokenizer(br.readLine());
+      int u = Integer.parseInt(st.nextToken());
+      int v = Integer.parseInt(st.nextToken());
+      int w = Integer.parseInt(st.nextToken());
+
+      graph[u].add(new Edge(v, w));
     }
+
+    // 최단 거리 구하기(K로부터)
+    distance[K] = 0;
+    PriorityQueue<Edge> queue = new PriorityQueue<>();
+    queue.offer(new Edge(K, 0));
+
+    while (!queue.isEmpty()) {
+      Edge cur = queue.poll();
+
+      for (Edge next : graph[cur.node]) {
+        int newDist = distance[cur.node] + next.weight;
+        if (distance[next.node] > newDist) {
+          distance[next.node] = newDist;
+          queue.offer(new Edge(next.node, newDist));
+        }
+      }
+    }
+
+    // 결과 출력
+    for (int i = 1; i <= V; i++) {
+      if (distance[i] == Integer.MAX_VALUE) {
+        bw.write("INF" + "\n");
+      } else {
+        bw.write(distance[i] + "\n");
+      }
+    }
+
+    bw.flush();
+    bw.close();
+  }
 }
 
-public class Main {
-    private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    private static final BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    private static final int INF = 100_000_000;
-    static int v,e,k;
-    static List<Node>[] list;
-    static int[] dist;
+class Edge implements Comparable<Edge> {
+  int node;
+  int weight;
 
+  public Edge(int node, int weight) {
+    this.node = node;
+    this.weight = weight;
+  }
 
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        v = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(br.readLine());
-        list = new ArrayList[v + 1];
-        dist = new int[v + 1];
-
-        Arrays.fill(dist, INF);
-
-        for(int i = 1; i <= v; i++){
-            list[i] = new ArrayList<>();
-        }
-        // 리스트에 그래프 정보를 초기화
-        for(int i = 0 ; i < e; i++){
-            st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int weight = Integer.parseInt(st.nextToken());
-            // start에서 end로 가는 weight 가중치
-            list[start].add(new Node(end, weight));
-        }
-
-        StringBuilder sb = new StringBuilder();
-        // 다익스트라 알고리즘
-        dijkstra(k);
-        // 출력 부분
-        for(int i = 1; i <= v; i++){
-            if(dist[i] == INF) sb.append("INF\n");
-            else sb.append(dist[i] + "\n");
-        }
-
-        bw.write(sb.toString());
-        bw.close();
-        br.close();
-    }
-
-    private static void dijkstra(int start){
-       PriorityQueue<Node> queue = new PriorityQueue<>();
-       boolean[] check = new boolean[v + 1];
-       queue.add(new Node(start, 0));
-       dist[start] = 0;
-
-       while(!queue.isEmpty()){
-           Node curNode = queue.poll();
-           int cur = curNode.end;
-
-           if(check[cur] == true) continue;
-           check[cur] = true;
-
-           for(Node node : list[cur]){
-               if(dist[node.end] > dist[cur] + node.weight){
-                   dist[node.end] = dist[cur] + node.weight;
-                   queue.add(new Node(node.end, dist[node.end]));
-               }
-           }
-       }
-    }
+  @Override
+  public int compareTo(Edge e) {
+    return this.weight - e.weight;
+  }
 }
 
+// import java.util.*;
+// import java.io.*;
+
+// class Main {
+// static String input = """
+// 5 6
+// 1
+// 5 1 1
+// 1 2 2
+// 1 3 3
+// 2 3 4
+// 2 4 5
+// 3 4 6
+// """;
+
+// static int V, E, K;
+// static ArrayList<Edge>[] graph;
+// static int[] distance;
+// public static void main(String[] args) throws IOException {
+
+// // BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+// BufferedReader br = new BufferedReader(new StringReader(input));
+// BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+// StringTokenizer st = new StringTokenizer(br.readLine());
+// V = Integer.parseInt(st.nextToken());
+// E = Integer.parseInt(st.nextToken());
+// K = Integer.parseInt(br.readLine());
+
+// // 그래프, 거리배열 초기화
+// distance = new int[V + 1];
+// Arrays.fill(distance, Integer.MAX_VALUE);
+
+// graph = new ArrayList[V + 1];
+// for (int i = 1; i <= V; i++) {
+// graph[i] = new ArrayList<>();
+// }
+
+// // 그래프 간선 연결
+// for (int i = 0; i < E; i++) {
+// st = new StringTokenizer(br.readLine());
+// int u = Integer.parseInt(st.nextToken());
+// int v = Integer.parseInt(st.nextToken());
+// int w = Integer.parseInt(st.nextToken());
+
+// graph[u].add(new Edge(v, w));
+// }
+
+// // 최단 거리 구하기(K로부터)
+// distance[K] = 0;
+// Queue<Integer> queue = new LinkedList<>();
+// queue.offer(K);
+
+// System.out.println("K + " + K);
+// while(!queue.isEmpty()) {
+// int cur = queue.poll();
+// int curDist = distance[cur];
+
+// for (Edge nextEdge : graph[cur]) {
+// if (distance[nextEdge.node] > curDist + nextEdge.weight) {
+// distance[nextEdge.node] = curDist + nextEdge.weight;
+// queue.offer(nextEdge.node);
+// }
+// }
+// }
+
+// // 결과 출력
+// for (int i = 1; i <= V; i++) {
+// if (distance[i] == Integer.MAX_VALUE) {
+// bw.write("INF" + "\n");
+// } else {
+// bw.write(distance[i] + "\n");
+// }
+// }
+
+// bw.flush();
+// bw.close();
+// }
+// }
+
+// class Edge {
+// int node;
+// int weight;
+
+// public Edge (int node, int weight) {
+// this.node = node;
+// this.weight = weight;
+// }
+// }
