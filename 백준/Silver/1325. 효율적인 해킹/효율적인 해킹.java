@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
     static int N, M;
     static ArrayList<Integer>[] graph;
-    static boolean[][] visited; // node에서 i로 갈 수 있는지 여부
+    static boolean[][] visited; // node에서 i로 갈 수 있는지
 
     /*
      * 1. 데이터 초기화(grpah, visited)
@@ -54,11 +54,13 @@ public class Main {
     static int bfs(int node) {
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(node);
-        visited[node][node] = true; // 방문 처리
         int cnt = 0;
 
         while (!queue.isEmpty()) {
             int cur = queue.poll();
+            if (visited[node][cur]) continue;
+            visited[node][cur] = true; // 방문 처리
+            cnt++; // 카운트 증가
 
             for (int next : graph[cur]) {
                 if (visited[node][next]) {
@@ -66,7 +68,7 @@ public class Main {
                     continue;
                 }
 
-                if (next < node) {
+                if (next <= node) {
                     // 현재 node보다 작은 next는 이미 해킹할 수 있는 컴퓨터 목록을 가지고 있음
                     for (int i = 1; i <= N; i++) {
                         if (visited[next][i] && !visited[node][i]) { // node -> next -> i 간접 경로를 통해 정보를 얻음
@@ -76,8 +78,6 @@ public class Main {
                     }
                 } else {
                     queue.offer(next);
-                    visited[node][next] = true;
-                    cnt++;
                 }
             }
         }
