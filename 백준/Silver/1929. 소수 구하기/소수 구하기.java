@@ -1,42 +1,40 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
-  static int M;
-  static int N;
-  static int[] arr;
+class Main {
+    
+    static int N;
+    static int M;
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    StringTokenizer st = new StringTokenizer(br.readLine());
+        // 데이터 초기화
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-    /* 데이터 초기화 */
-    int M = Integer.parseInt(st.nextToken());
-    int N = Integer.parseInt(st.nextToken());
-    arr = new int[N + 1];
-    for (int i = 2; i <= N; i++) {
-      arr[i] = i;
+        int[] arr = new int[M + 1];
+        for (int i = N; i <= M; i++) {
+            arr[i] = i;
+        }
+
+        // 소수가 아닌 경우 0으로 값 변환
+        for (int i = 2; i <= Math.sqrt(M); i++) {
+            for (int j = i * 2; j <= M; j += i) {
+                arr[j] = 0;
+            }
+        }
+
+        arr[1] = 0;
+        for (int i = N; i <= M; i++) {
+            if (arr[i] != 0) {
+                bw.write(arr[i] + "\n");
+            }
+        }
+
+        bw.flush();
+        bw.close();
     }
-
-    /* 소수가 아닌 수 삭제 (0으로 처리) */
-    for (int i = 2; i <= Math.sqrt(N); i++) { // N의 제곱근까지만 처리
-      if (arr[i] == 0) {
-        continue;
-      }
-      for (int j = i * 2; j <= N; j += i) {
-        arr[j] = 0;
-      }
-    }
-
-    for (int i = M; i <= N; i++) {
-      if (arr[i] != 0) {
-        bw.write(i + "\n");
-      }
-    }
-
-    bw.flush();
-    bw.close();
-  }
 }
