@@ -113,3 +113,66 @@ public class Main {
     }
   }
 }
+
+
+/* 25.06.18 두번재 풀이 - 이전보다 성능 낮음 */
+import java.util.*;
+import java.io.*;
+
+class Main {
+    
+    static int S;   // 문자열 길이
+    static int P;   // 부분문자열 길이
+    static String[] strs;
+    static int A, C, G, T;  // pw에 필요한 최소 개수
+    static Map<String, Integer> map = new HashMap<>();
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+
+        /* 데이터 초기화 */
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        S = Integer.parseInt(st.nextToken());
+        P = Integer.parseInt(st.nextToken());
+        strs = br.readLine().split("");
+
+        st = new StringTokenizer(br.readLine());
+        A = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        G = Integer.parseInt(st.nextToken());
+        T = Integer.parseInt(st.nextToken());
+
+        
+        /* 로직 */
+        int cnt = 0;
+        map.put("A", 0);
+        map.put("C", 0);
+        map.put("G", 0);
+        map.put("T", 0);
+        for (int i = 0; i < P; i++) {
+            map.put(strs[i], map.get(strs[i]) + 1);
+        }
+        if (check()) cnt++;
+
+        int start = 0;
+        int end = P;
+        while(end < S) {     
+            map.put(strs[start], map.get(strs[start]) - 1);
+            map.put(strs[end], map.get(strs[end]) + 1);
+
+            start++; end++;
+
+            if (check()) cnt++;
+        }
+        
+        bw.write(String.valueOf(cnt));
+        bw.flush();
+        bw.close();
+    }
+
+    static boolean check() {
+        return map.get("A") >= A && map.get("C") >= C && map.get("G") >= G && map.get("T") >= T;
+    }
+}
