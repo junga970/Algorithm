@@ -1,50 +1,53 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
-  static int N, L;
+class Main {
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    StringTokenizer st = new StringTokenizer(br.readLine());
+    static int N;
+    static int L;
 
-    N = Integer.parseInt(st.nextToken());
-    L = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    // deque
-    Deque<Node> deque = new LinkedList<>();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
 
-    // A(1) ~ A(N)
-    st = new StringTokenizer(br.readLine());
-    for (int i = 1; i <= N; i++) {
-      int value = Integer.parseInt(st.nextToken()); // A(i)의 Value
+        Deque<Node> deque = new LinkedList<>();
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int cur = Integer.parseInt(st.nextToken());
 
-      // 현재 추가하려는 값보다 큰 값은 제거
-      while (!deque.isEmpty() && deque.peekLast().value >= value) {
-        deque.removeLast();
-      }
+            // deque에서 cur보다 큰 값 제거(뒤에서부터)
+            while (!deque.isEmpty() && deque.getLast().value > cur) {
+                deque.removeLast();
+            }
 
-      deque.addLast(new Node(i, value));
+            // deque에 cur 추가
+            deque.addLast(new Node(i, cur));
 
-      // 범위를 벗어난 값 제거
-      if (deque.peekFirst().index <= i - L) {
-        deque.removeFirst();
-      }
+            // deque에서 인덱스 벗어난 값 제거
+            if (deque.getFirst().idx <= i - L) {
+                deque.removeFirst();
+            }
 
-      bw.write(deque.getFirst().value +  " ");
+            // deque 중 최소값(맨 앞에 있는 값) 출력
+            int min = deque.getFirst().value;
+
+            bw.write(min + " ");
+        }
+
+        bw.flush();
+        bw.close();
     }
-    bw.flush();
-    bw.close();
-  }
 }
 
 class Node {
-  int index;
-  int value;
+    int idx, value;
 
-  Node(int index, int value) {
-    this.index = index;
-    this.value = value;
-  }
+    public Node(int idx, int value) {
+        this.idx = idx;
+        this.value = value;
+    }
 }
