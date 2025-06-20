@@ -51,3 +51,61 @@ class Node {
         this.value = value;
     }
 }
+
+/* 두번째 풀이 - 전과 동일하게 풀음 */
+import java.util.*;
+import java.io.*;
+
+class Main {
+
+    static int N;
+    static int L;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
+
+        // degue를 이용하고, 항상 범위내 가장 작은 숫자가 앞에 있도록 함
+        Deque<Node> deque = new LinkedList<>();
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int cur = Integer.parseInt(st.nextToken());
+
+            // deque에서 cur보다 큰 값은 모두 제거(뒤에서부터)
+            while (!deque.isEmpty() && deque.getLast().value > cur) {
+                deque.removeLast();
+            }
+
+            // deque에 cur 추가
+            deque.addLast(new Node(i, cur));
+
+            // deque에서 범위 벗어난 값 제거(deque 앞쪽 확인)
+            if (deque.getFirst().index <= i - L) {
+                deque.removeFirst();
+            }
+
+            // 맨 앞엔 가장 작은 수만 있게 됨
+            int min = deque.getFirst().value;
+
+            // buffer에 결과 추가
+            bw.write(min + " ");
+        }
+
+        bw.flush();
+        bw.close();
+    }
+}
+
+class Node {
+    int index;
+    int value;
+
+    public Node(int index, int value) {
+        this.index = index;
+        this.value = value;
+    }
+}
